@@ -25,10 +25,13 @@ class Horse extends Animal
 
 class Cheetah extends Animal
 
+class Monkey extends Animal
+
 sam = new Snake "Sammy the Python"
 tom = new Horse "Tommy the Palomino"
 ben = new Cheetah "Benny the Cheetah"
 poe = new Hippo "Poe the 'Potomous"
+moe = new Monkey "Moe the Marauder"
 
 describe 'YouAreDaChef', ->
 
@@ -66,9 +69,11 @@ describe 'YouAreDaChef', ->
   it 'should handle methods not directly defined', ->
 
     expect(ben.move(7)).toBe('Benny the Cheetah moved 7m.')
+    expect(moe.move(7)).toBe('Moe the Marauder moved 7m.')
 
     YouAreDaChef.advise(Cheetah).around 'move',  (fn, by_how_much) ->
       fn(by_how_much * 10) + ' That\'s great!'
 
     expect(ben.move(7)).toBe('Benny the Cheetah moved 70m. That\'s great!')
+    expect(moe.move(7)).toBe('Moe the Marauder moved 7m.')
 
