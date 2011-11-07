@@ -24,8 +24,6 @@ class Horse extends Animal
     super 45
 
 class Cheetah extends Animal
-  move: ->
-    super 70
 
 sam = new Snake "Sammy the Python"
 tom = new Horse "Tommy the Palomino"
@@ -34,24 +32,43 @@ poe = new Hippo "Poe the 'Potomous"
 
 describe 'YouAreDaChef', ->
 
-  it 'should not affect classes uless explicitly run', ->
-    expect(ben.move()).toBe('Benny the Cheetah moved 70m.')
-    expect(ben.name).toBe("Benny the Cheetah")
-
   it 'should allow before advice', ->
+
+    expect(tom.move()).toBe('Tommy the Palomino moved 45m.')
+    expect(tom.name).toBe("Tommy the Palomino")
+
     YouAreDaChef.advise(Horse).before 'move', ->
       @name = "Harry the Hoofer"
-    expect(tom.move()).toBe('Harry the Hoofer moved 45m.') # name has changed
-    expect(tom.name).toBe("Harry the Hoofer") # name has changed now
+
+    expect(tom.move()).toBe('Harry the Hoofer moved 45m.')
+    expect(tom.name).toBe("Harry the Hoofer")
 
   it 'should allow after advice', ->
+
+    expect(sam.move()).toBe('Sammy the Python moved 5m.')
+    expect(sam.name).toBe("Sammy the Python")
+
     YouAreDaChef.advise(Snake).after 'move', ->
       @name = 'Sly the Slitherer'
-    expect(sam.move()).toBe('Sammy the Python moved 5m.') # name has not changed
-    expect(sam.name).toBe("Sly the Slitherer") # name has changed now
+
+    expect(sam.move()).toBe('Sammy the Python moved 5m.')
+    expect(sam.name).toBe("Sly the Slitherer")
 
   it 'should allow around advice', ->
+
+    expect(poe.move(2)).toBe('Poe the \'Potomous lumbered 2m.')
+
     YouAreDaChef.advise(Hippo).around 'move', (fn, by_how_much) ->
-      console?.log arguments
       fn(by_how_much * 2)
-    expect(poe.move(2)).toBe('Poe the \'Potomous lumbered 4m.') # name has not changed
+
+    expect(poe.move(2)).toBe('Poe the \'Potomous lumbered 4m.')
+
+  it 'should handle methods not directly defined', ->
+
+    expect(ben.move(7)).toBe('Benny the Cheetah moved 7m.')
+
+    YouAreDaChef.advise(Cheetah).around 'move',  (fn, by_how_much) ->
+      fn(by_how_much * 10) + ' That\'s great!'
+
+    expect(ben.move(7)).toBe('Benny the Cheetah moved 70m. That\'s great!')
+
