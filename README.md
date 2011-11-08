@@ -41,7 +41,15 @@ Is it any good?
 
 Yes.
 
+Can I use it with pure Javascript?
+---
+
+[Yes][js].
+
 Where can I read more?
 ---
 
-[Aspect-Oriented Programming in Coffeescript using Combinator Birds](https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme)
+[Aspect-Oriented Programming in Coffeescript using Combinator Birds][blog]
+
+[js]: https://github.com/raganwald/YouAreDaChef/blob/master/lib/YouAreDaChef.js
+[blog]: https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme
