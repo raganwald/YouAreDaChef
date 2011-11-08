@@ -80,8 +80,8 @@ describe 'YouAreDaChef', ->
 
     expect(poe.move(2)).toBe('Poe the \'Potomous lumbered 2m.')
 
-    YouAreDaChef(Hippo).around 'move', (fn, by_how_much) ->
-      fn(by_how_much * 2)
+    YouAreDaChef(Hippo).around 'move', (pointcut, by_how_much) ->
+      pointcut(by_how_much * 2)
 
     expect(poe.move(2)).toBe('Poe the \'Potomous lumbered 4m.')
 
@@ -90,8 +90,21 @@ describe 'YouAreDaChef', ->
     expect(ben.move(7)).toBe('Benny the Cheetah moved 7m.')
     expect(moe.move(7)).toBe('Moe the Marauder moved 7m.')
 
-    YouAreDaChef(Cheetah).around 'move',  (fn, by_how_much) ->
-      fn(by_how_much * 10) + ' That\'s great!'
+    YouAreDaChef(Cheetah).around 'move',  (pointcut, by_how_much) ->
+      pointcut(by_how_much * 10) + ' That\'s great!'
 
     expect(ben.move(7)).toBe('Benny the Cheetah moved 70m. That\'s great!')
     expect(moe.move(7)).toBe('Moe the Marauder moved 7m.')
+
+  it 'should allow specifying methods by regular expression', ->
+
+    console?.log
+
+    expect(kat.move(12)).toBe('Kat the Big Cat moved 12m.')
+    expect(kat.movie(12)).toBe('Kat the Big Cat looks good moving 12m.')
+
+    YouAreDaChef(Tiger).around /mo.*/, (pointcut, match, by_how_much) ->
+      pointcut(by_how_much * 10)
+
+    expect(kat.move(12)).toBe('Kat the Big Cat moved 120m.')
+    expect(kat.movie(12)).toBe('Kat the Big Cat looks good moving 120m.')
