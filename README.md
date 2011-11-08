@@ -65,7 +65,7 @@ Can I use it with pure Javascript?
 Where can I read more?
 ---
 
-[Aspect-Oriented Programming in Coffeescript with a side order of Combinator Birds][blog]
+[Separating Concerns in Coffeescript using Aspect-Oriented Programming][blog]
 
 [js]: https://github.com/raganwald/YouAreDaChef/blob/master/lib/YouAreDaChef.js
 [blog]: https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme
