@@ -90,4 +90,3 @@ describe 'YouAreDaChef', ->
 
     expect(ben.move(7)).toBe('Benny the Cheetah moved 70m. That\'s great!')
     expect(moe.move(7)).toBe('Moe the Marauder moved 7m.')
-
