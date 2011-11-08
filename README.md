@@ -35,6 +35,22 @@ For example:
             
         .after 'run', ->
             @trigger 'move'
+            
+You can even use regular expressions to specify pointcuts:
+
+    class EnterpriseyLegume
+      setId:         (@id)         ->
+      setName:       (@name)       ->
+      setDepartment: (@department) ->
+      setCostCentre: (@costCentre) ->
+    
+    YouAreDaChef(EnterpriseyLegume)
+    
+      .around /set(.*)/, (pointcut, match, value) ->
+        performTransaction () ->
+          writeToLog "#{match[1]}: #{value}"
+          pointcut(value)
+    
 
 Is it any good?
 ---
