@@ -1,7 +1,7 @@
 You Are 'Da Chef
 ===
 
-What and Why
+What is it?
 ---
 
 This library adds `before`, `after`, `around`, and `guard` method combinations to underscore.js projects, in much the same style as the Common Lisp Object System or Ruby on Rails controllers. With method combinations, you can easily separate concerns.
@@ -61,6 +61,18 @@ Can I use it with pure Javascript?
 ---
 
 [Yes][js].
+
+Will it make me smarter?
+---
+
+No, but it can make you *appear* smarter. Just explain that *guard advice is a monad*:
+    
+    YouAreDaChef(EnterpriseyLegume)
+    
+      .guard /write(.*)/, ->
+        @user.hasPermission('write', match[1])
+
+Guard advice works like a before combination, with the bonus that if it returns something falsely, the pointcut will not be executed. This behaviour is similar to the way ActiveRecord callbacks work.
 
 Where can I read more?
 ---
