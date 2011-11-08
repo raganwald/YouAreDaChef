@@ -29,12 +29,17 @@ class Monkey extends Animal
 
 class Lion extends Animal
 
+class Tiger extends Animal
+  movie: (meters) ->
+    @name + " looks good moving #{meters}m."
+
 sam = new Snake "Sammy the Python"
 tom = new Horse "Tommy the Palomino"
 ben = new Cheetah "Benny the Cheetah"
 poe = new Hippo "Poe the 'Potomous"
 moe = new Monkey "Moe the Marauder"
 leo = new Lion "Leo the Lionheart"
+kat = new Tiger "Kat the Big Cat"
 
 describe 'YouAreDaChef', ->
 
