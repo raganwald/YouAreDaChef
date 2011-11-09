@@ -74,6 +74,10 @@ No, but it can make you *appear* smarter. Just explain that *guard advice is a m
 
 Guard advice works like a before combination, with the bonus that if it returns something falsely, the pointcut will not be executed. This behaviour is similar to the way ActiveRecord callbacks work.
 
+You can also try making a cryptic reference to [COMEFROM][cf]. 
+
+[cf]: http://en.wikipedia.org/wiki/COMEFROM
+
 Where can I read more?
 ---
 
