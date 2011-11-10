@@ -55,7 +55,9 @@ You can even use regular expressions to specify pointcuts:
 Is it any good?
 ---
 
-Yes.
+[Yes][y].
+
+[y]: http://news.ycombinator.com/item?id=3067434
 
 Can I use it with pure Javascript?
 ---
