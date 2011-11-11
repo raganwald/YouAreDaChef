@@ -76,9 +76,11 @@ No, but it can make you *appear* smarter. Just explain that *guard advice is a m
 
 Guard advice works like a before combination, with the bonus that if it returns something falsely, the pointcut will not be executed. This behaviour is similar to the way ActiveRecord callbacks work.
 
-You can also try making a cryptic reference to [COMEFROM][cf]. 
+You can also try making a [cryptic][cry] reference to a [computed][comp], non-local [COMEFROM][cf]. 
 
 [cf]: http://en.wikipedia.org/wiki/COMEFROM
+[cry]: http://www.reddit.com/r/programming/comments/m4r4t/aspectoriented_programming_in_coffeescript_with_a/c2yfx6w
+[comp]: http://en.wikipedia.org/wiki/Goto#Computed_GOTO
 
 Where can I read more?
 ---
