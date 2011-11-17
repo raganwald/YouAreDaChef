@@ -1,0 +1,22 @@
+{
+  "author": "Reg Braithwaite <raganwald@gmail.com> (http://reginald.braythwayt.com)",
+  "name": "YouAreDaChef",
+  "description": "Coffeescript/Javascript method combinations",
+  "version": "0.0.1",
+  "homepage": "https://github.com/raganwald/YouAreDaChef",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/raganwald/YouAreDaChef.git"
+  },
+  "main": "lib/YouAreDaChef.js",
+  "scripts": {
+    "test": "jasmine-node --coffee --verbose spec"
+  },
+  "engines": {
+    "node": "~0.4.12"
+  },
+  "dependencies": {
+    "underscore": "~1.2.2"
+  },
+  "devDependencies": {}
+}
