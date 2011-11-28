@@ -13,10 +13,10 @@
     "test": "jasmine-node --coffee --verbose spec"
   },
   "engines": {
-    "node": "~0.4.12"
+    "node": ""
   },
   "dependencies": {
-    "underscore": "~1.2.2"
+    "underscore": ">=1.2.2"
   },
   "devDependencies": {}
 }
