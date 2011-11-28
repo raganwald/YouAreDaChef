@@ -64,6 +64,13 @@ Can I use it with pure Javascript?
 
 [Yes][js].
 
+Can I install it with npm?
+---
+
+Yes:
+
+    npm install YouAreDaChef
+
 Will it make me smarter?
 ---
 
