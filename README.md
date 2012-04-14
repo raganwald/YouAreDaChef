@@ -92,7 +92,9 @@ You can also try making a [cryptic][cry] reference to a [computed][comp], non-lo
 Where can I read more?
 ---
 
-[Separating Concerns in Coffeescript using Aspect-Oriented Programming][blog]
+[Separating Concerns in Coffeescript using Aspect-Oriented Programming][blog]  
+[Implementing Garbage Collection in CS/JS with Aspect-Oriented Programming][gc]
 
 [js]: https://github.com/raganwald/YouAreDaChef/blob/master/lib/YouAreDaChef.js
+[gc]: https://github.com/raganwald/homoiconic/blob/master/2012/03/garbage_collection_in_coffeescript.md#readme
 [blog]: https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme
