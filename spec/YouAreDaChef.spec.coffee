@@ -43,6 +43,28 @@ kat = new Tiger "Kat the Big Cat"
 
 describe 'YouAreDaChef', ->
 
+  it 'shouldn\'t introduce a spurious method', ->
+
+    class Pig extends Animal
+
+    class PotBelliedPig extends Pig
+
+    # we introduce advice in the leaf class
+    YouAreDaChef(PotBelliedPig).before 'move', ->
+      @name = "A Vietnamese Pot-Bellied Pig named #{@name}"
+
+    # and then we introduce advice in its parent
+    YouAreDaChef(Pig).before 'move', ->
+      @name = @name.toUpperCase()
+
+    piggie = new Pig('Piggie')
+
+    expect(piggie.move(10)).toBe('PIGGIE moved 10m.')
+
+    porkie = new PotBelliedPig('Porky')
+
+    expect(porkie.move(10)).toBe('A Vietnamese Pot-Bellied Pig named PORKY moved 10m.')
+
   it 'should allow before advice', ->
 
     expect(tom.move()).toBe('Tommy the Palomino moved 45m.')
