@@ -63,7 +63,7 @@ describe 'YouAreDaChef', ->
 
     porkie = new PotBelliedPig('Porky')
 
-    expect(porkie.move(10)).toBe('A Vietnamese Pot-Bellied Pig named PORKY moved 10m.')
+    expect(porkie.move(10)).toBe('A VIETNAMESE POT-BELLIED PIG NAMED PORKY moved 10m.')
 
   it 'should allow before advice', ->
 

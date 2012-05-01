@@ -9,16 +9,30 @@ _.defaults this,
           _.each pointcut_exprs, (expr) ->
             if _.isString(expr) and _.isFunction(clazz.prototype[expr])
               name = expr
+              if _.include(_.keys(clazz.prototype), name)
+                pointcut = clazz.prototype[name]
+              else if clazz.__super__?
+                pointcut = (args...) ->
+                  clazz.__super__[name].apply(this, args)
+              else
+                throw 'No method or superclass given ' + name
               cuts[name] =
                 clazz: clazz
-                pointcut: clazz.prototype[name]
+                pointcut: pointcut
                 inject: []
             else if expr instanceof RegExp
               _.each _.functions(clazz.prototype), (name) ->
                 if match = name.match(expr)
+                  if _.include(_.keys(clazz.prototype), name)
+                    pointcut = clazz.prototype[name]
+                  else if clazz.__super__?
+                    pointcut = (args...) ->
+                      clazz.__super__[name].apply(this, args)
+                  else
+                    throw 'No method or superclass given ' + name
                   cuts[name] =
                     clazz: clazz
-                    pointcut: clazz.prototype[name]
+                    pointcut: pointcut
                     inject: match
 
     combinator =
