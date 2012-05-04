@@ -16,7 +16,8 @@
     "node": ""
   },
   "dependencies": {
-    "underscore": ">=1.2.2"
+    "underscore": ">=1.2.2",
+    "UnderscoreMatchersForJasmine": ">=0.0.1"
   },
   "devDependencies": {}
 }
