@@ -64,7 +64,7 @@ I don't believe you!
 
 *C'mon, meta-programmed code is read-only. It looks good, but when it comes time to debug or modify anything, it's a nightmare to step through it in the debugger and figure out what's going on.*
 
-That's often the case, but starting with version 1.0, YouAreDaChef is designed for code that's easy to write, nit just easy to read. Instead of blindly patching methods with wrapper functions, YouAreDaChef stores all of the "advice" functions in a special data structure in the class. You can access it with the `.inspect` method:
+That's often the case, but starting with version 1.0, YouAreDaChef is designed to make code that's easy to write, not just easy to read. Instead of blindly patching methods with wrapper functions, YouAreDaChef stores all of the "advice" functions in a special data structure in the class. You can access it with the `.inspect` method:
 
     YouAreDaChef.inspect(EnterpriseyLegume)
       => { setCostCentre: 
