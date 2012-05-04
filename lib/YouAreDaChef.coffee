@@ -90,7 +90,7 @@ _.defaults this,
               if clazz.prototype["guard_#{name}_daemon"].apply(this, args)
                 clazz.prototype["before_#{name}_daemon"].apply(this, args)
                 _.tap clazz.prototype["around_#{name}_daemon"].apply(this, args), (retv) =>
-                  clazz.prototype["after_#{name}_daemon"].call(this, retv, args...)
+                  clazz.prototype["after_#{name}_daemon"].apply(this, args)
                   
           # Add the advice to the appropriate list
           daemonology[verb].push(advice)

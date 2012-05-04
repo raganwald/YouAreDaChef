@@ -92,7 +92,7 @@ That's often the case, but not with YouAreDaChef. Instead of blindly patching me
              guard: [],
              default: [Function] } }
              
-You can inspect each class separately. For each method that has been "advise," the advice is collected in one array for each of the four types of advice. We can see above that four methods have been given `around` advice. The `default` holds the original method's body. In some cases, there is no original method. For example:
+You can inspect each class separately. For each method that has been "advised," the advice is collected in one array for each of the four types of advice. We can see above that four methods have been given `around` advice. The `default` holds the original method's body. In some cases, there is no original method. For example:
 
     class Animal
       isAnimal: ->
