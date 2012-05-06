@@ -3,7 +3,7 @@ _ = require 'underscore'
 _.defaults this,
   YouAreDaChef: (clazzes...) ->
 
-    advise = (verb, advice, pointcut_exprs) ->
+    advise = (verb, advice, namespace, pointcut_exprs) ->
       _.each clazzes, (clazz) ->
         daemonize = (name, inject = []) ->
           daemonology = (clazz.__YouAreDaChef ?= {})[name] ?= {}
@@ -24,8 +24,7 @@ _.defaults this,
                   daemon.apply(this, daemon_args)
                 else if _.isArray(daemon)
                   daemon[1].apply(this, daemon_args)
-                else for throw_me_away, advice of daemon
-                  advice.apply(this, args)
+                else _.values(daemon)[0].apply(this, daemon_args)
               # try a super-daemon if available
               clazz.__super__?["before_#{name}_daemon"]?.apply(this, args)
 
@@ -39,8 +38,7 @@ _.defaults this,
                   daemon.apply(this, daemon_args)
                 else if _.isArray(daemon)
                   daemon[1].apply(this, daemon_args)
-                else for throw_me_away, advice of daemon
-                  advice.apply(this, daemon_args)
+                else _.values(daemon)[0].apply(this, daemon_args)
 
             clazz.prototype["around_#{name}_daemon"] = (default_fn, args...) ->
               daemon_args = inject.concat args
@@ -54,8 +52,7 @@ _.defaults this,
                   fn_list.unshift daemon
                 else if _.isArray(daemon)
                   fn_list.unshift daemon[1]
-                else for throw_me_away, advice of daemon
-                  fn_list.unshift advice
+                else fn_list.unshift _.values(daemon)[0]
 
               fn = _.reduce fn_list, (acc, advice) ->
                 (args...) -> advice.call(this, acc, daemon_args...)
@@ -81,8 +78,7 @@ _.defaults this,
                   return false unless daemon.apply(this, daemon_args)
                 else if _.isArray(daemon)
                   return false unless daemon[1].apply(this, daemon_args)
-                else for throw_me_away, advice of daemon
-                  return false unless advice.apply(this, daemon_args)
+                else !!_.values(daemon)[0].apply(this, daemon_args)
               true
 
           # this patches the original method to call advices and pass match data
@@ -106,6 +102,14 @@ _.defaults this,
                   clazz.prototype["after_#{name}_daemon"].apply(this, args)
 
           # Add the advice to the appropriate list
+          if namespace?
+            if _.isFunction(advice)
+              advice = _.tap {}, (h) -> h["#{namespace}: #{daemonology[verb].length + 1}"] = advice
+            else if _.isArray(advice)
+              advice = _.tap {}, (h) -> h["#{namespace}: #{advice[0]}"] = advice[1]
+            else
+              key = _.keys(advice)[0]
+              advice = _.tap {}, (h) -> h["#{namespace}: #{key}"] = advice[key]
           if verb is 'default'
             daemonology.default = advice
           else daemonology[verb].push(advice)
@@ -123,28 +127,34 @@ _.defaults this,
         clazz.__YouAreDaChef
 
     combinator =
+    
+      _namespace: null
 
       default: (pointcut_exprs..., advice) ->
-        advise 'default', advice, pointcut_exprs
+        advise 'default', advice, @_namespace, pointcut_exprs
         combinator
 
       before: (pointcut_exprs..., advice) ->
-        advise 'before', advice, pointcut_exprs
+        advise 'before', advice, @_namespace, pointcut_exprs
         combinator
 
       # kestrel
       after: (pointcut_exprs..., advice) ->
-        advise 'after', advice, pointcut_exprs
+        advise 'after', advice, @_namespace, pointcut_exprs
         combinator
 
       # cardinal combinator
       around: (pointcut_exprs..., advice) ->
-        advise 'around', advice, pointcut_exprs
+        advise 'around', advice, @_namespace, pointcut_exprs
         combinator
 
       # bluebird
       guard: (pointcut_exprs..., advice) ->
-        advise 'guard', advice, pointcut_exprs
+        advise 'guard', advice, @_namespace, pointcut_exprs
+        combinator
+        
+      namespace: (str) ->
+        @_namespace = str
         combinator
 
 @YouAreDaChef.inspect ?= (clazz) ->

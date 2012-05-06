@@ -197,3 +197,26 @@ describe 'YouAreDaChef', ->
         named_advice: (meters) -> "#{@name} sauntered #{meters}m."
 
     expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
+    
+class Nag extends Horse
+    
+describe 'namespaces', ->
+  
+  it 'should namespace anonymous advices', ->
+    
+    YouAreDaChef(Nag)
+      .namespace('namu')
+      .before 'move', ->
+        # do nothing
+        
+    expect( _.keys(YouAreDaChef.inspect(Nag).move.before[0]) ).toInclude('namu: 1')
+  
+  it 'should namespace named advices', ->
+    
+    YouAreDaChef(Nag)
+      .namespace('namu')
+      .before 'move',
+        descriptor: ->
+          # do nothing
+        
+    expect( _.keys(YouAreDaChef.inspect(Nag).move.before[0]) ).toInclude('namu: descriptor')
