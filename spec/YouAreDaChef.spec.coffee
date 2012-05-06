@@ -17,7 +17,7 @@ class Animal
 
 class Hippo extends Animal
   move: (meters) ->
-    @name + " lumbered #{meters}m."
+    "#{@name} lumbered #{meters}m."
 
 class Snake extends Animal
   move: ->
@@ -38,8 +38,12 @@ class Monkey extends Animal
 class Lion extends Animal
 
 class Tiger extends Animal
-  movie: (meters) ->
+  motivate: (meters) ->
     @name + " looks good moving #{meters}m."
+
+class Ass extends Animal
+
+class Assyrian extends Ass
 
 sam = new Snake "Sammy the Python"
 tom = new Horse "Tommy the Palomino"
@@ -49,6 +53,7 @@ poe = new Hippo "Poe the 'Potomous"
 moe = new Monkey "Moe the Marauder"
 leo = new Lion "Leo the Lionheart"
 kat = new Tiger "Kat the Big Cat"
+abe = new Assyrian "Abraham"
 
 describe 'YouAreDaChef', ->
 
@@ -167,10 +172,28 @@ describe 'YouAreDaChef', ->
   it 'should allow specifying methods by regular expression', ->
 
     expect(kat.move(12)).toBe('Kat the Big Cat moved 12m.')
-    expect(kat.movie(12)).toBe('Kat the Big Cat looks good moving 12m.')
+    expect(kat.motivate(12)).toBe('Kat the Big Cat looks good moving 12m.')
 
     YouAreDaChef(Tiger).around /mo.*/, (pointcut, match, by_how_much) ->
       pointcut(by_how_much * 10)
 
     expect(kat.move(12)).toBe('Kat the Big Cat moved 120m.')
-    expect(kat.movie(12)).toBe('Kat the Big Cat looks good moving 120m.')
+    expect(kat.motivate(12)).toBe('Kat the Big Cat looks good moving 120m.')
+
+  it 'should allow definition and redefinition of default advice without disrupting the chain', ->
+
+    YouAreDaChef(Ass)
+      .before 'move', ->
+        @name = 'Rumplestiltskin'
+
+    YouAreDaChef(Assyrian)
+      .default 'move', (meters) ->
+        "#{@name} lumbered #{meters}m."
+
+    expect(abe.move(5)).toBe("Rumplestiltskin lumbered 5m.")
+
+    YouAreDaChef(Assyrian)
+      .default 'move',
+        named_advice: (meters) -> "#{@name} sauntered #{meters}m."
+
+    expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
