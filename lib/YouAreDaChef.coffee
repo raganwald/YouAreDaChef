@@ -159,6 +159,8 @@ _.each ['default', 'before', 'around', 'after', 'guard'], (verb) ->
       @advise verb, advice, @namespace(), pointcut_exprs
     else throw "What do I do with #{args} for #{verb}?"
     this
+    
+Combinator::def = Combinator::define = Combinator::default
 
 YouAreDaChef = (args...) ->
   new Combinator(args...)

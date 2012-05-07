@@ -347,3 +347,29 @@ describe 'fluent syntax', ->
 
     expect(@foo).toRespondTo('something')
     expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
+    
+describe 'euphemisms', ->
+
+  beforeEach ->
+
+    class @Foo
+    class @Bar
+
+    @foo = new @Foo()
+    @bar = new @Bar()
+
+  it "should handle 'def' and 'define'", ->
+
+    YouAreDaChef
+      .namespace('baz')
+      .for(@Foo)
+        .def
+          something: ->
+      .for(@Bar)
+        .define
+          awful: ->
+
+    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
+    expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
+  
+  
