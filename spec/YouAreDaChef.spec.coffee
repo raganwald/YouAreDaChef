@@ -335,3 +335,15 @@ describe 'fluent syntax', ->
 
     expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
     expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
+
+  it 'should support compount syntax', ->
+
+    expect(@foo).not.toRespondTo('something')
+
+    YouAreDaChef
+      .for(baz: @Foo)
+        .default
+          something: ->
+
+    expect(@foo).toRespondTo('something')
+    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
