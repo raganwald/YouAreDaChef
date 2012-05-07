@@ -135,7 +135,7 @@ _.defaults this,
             [pointcut_exprs..., advice] = args
             advise verb, advice, @_namespace, pointcut_exprs
           else throw "What do I do with #{args} for #{verb}?"
-
+          this
 
 @YouAreDaChef.inspect ?= (clazz) ->
   clazz.__YouAreDaChef
