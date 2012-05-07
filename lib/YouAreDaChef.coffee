@@ -1,7 +1,6 @@
 _ = require 'underscore'
 
-_.defaults this,
-  YouAreDaChef: (clazzes...) ->
+YouAreDaChef = (clazzes...) ->
 
     advise = (verb, advice, namespace, pointcut_exprs) ->
       _.each clazzes, (clazz) ->
@@ -125,6 +124,8 @@ _.defaults this,
       namespace: (str) ->
         @_namespace = str
         combinator
+      for: (args...) ->
+        YouAreDaChef(args...)
     }, (c) ->
       _.each ['default', 'before', 'around', 'after', 'guard'], (verb) ->
         c[verb] = (args...) ->
@@ -139,7 +140,15 @@ _.defaults this,
           else throw "What do I do with #{args} for #{verb}?"
           this
 
-@YouAreDaChef.inspect ?= (clazz) ->
-  clazz.__YouAreDaChef
+_.defaults YouAreDaChef,
+  inspect: (clazz) ->
+    clazz.__YouAreDaChef
+  
+  for: (args...) ->
+    YouAreDaChef(args...)
+    
+_.defaults this, {YouAreDaChef}
+  
+
 
 this

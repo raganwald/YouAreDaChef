@@ -268,3 +268,57 @@ describe 'bulk advice syntax', ->
     expect(arab.maned).toBeFalsy()
     expect( arab.mane() ).toEqual('long')
     expect(arab.maned).toBeTruthy()
+    
+describe 'fluent syntax', ->
+  
+  beforeEach ->
+    
+    class @Foo
+    class @Bar
+    class @Baz
+      
+    @foo = new @Foo()
+    @bar = new @Bar()
+    @baz = new @Baz()
+  
+  it 'should support a single class', ->
+    
+    expect(@foo).not.toRespondTo('something')
+    
+    YouAreDaChef
+      .for(@Foo)
+        .default
+          something: ->
+            
+    expect(@foo).toRespondTo('something')
+    
+  it 'should support multiple classes', ->
+    
+    expect(@foo).not.toRespondTo('something')
+    expect(@bar).not.toRespondTo('something')
+    
+    YouAreDaChef
+      .for(@Foo, @Bar)
+        .default
+          something: ->
+            
+    expect(@foo).toRespondTo('something')
+    expect(@bar).toRespondTo('something')
+    
+  it 'should support changing classes', ->
+    
+    expect(@foo).not.toRespondTo('something', 'awful')
+    expect(@bar).not.toRespondTo('something', 'awful')
+    
+    YouAreDaChef
+      .for(@Foo)
+        .default
+          something: ->
+      .for(@Bar)
+        .default
+          awful: ->
+            
+    expect(@foo).toRespondTo('something')
+    expect(@foo).not.toRespondTo('awful')
+    expect(@bar).not.toRespondTo('something')
+    expect(@bar).toRespondTo('awful')
