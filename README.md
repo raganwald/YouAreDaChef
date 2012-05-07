@@ -64,64 +64,7 @@ I don't believe you!
 
 *C'mon, meta-programmed code is read-only. It looks good, but when it comes time to debug or modify anything, it's a nightmare to step through it in the debugger and figure out what's going on.*
 
-That's often the case, but starting with version 1.0, YouAreDaChef is designed to make code that's easy to write, not just easy to read. Instead of blindly patching methods with wrapper functions, YouAreDaChef stores all of the "advice" functions in a special data structure in the class. You can access it with the `.inspect` method:
-
-    YouAreDaChef.inspect(EnterpriseyLegume)
-      => { setCostCentre: 
-           { before: [],
-             after: [],
-             around: [ [Function] ],
-             guard: [],
-             default: [Function] },
-          setDepartment: 
-           { before: [],
-             after: [],
-             around: [ [Function] ],
-             guard: [],
-             default: [Function] },
-          setId: 
-           { before: [],
-             after: [],
-             around: [ [Function] ],
-             guard: [],
-             default: [Function] },
-          setName: 
-           { before: [],
-             after: [],
-             around: [ [Function] ],
-             guard: [],
-             default: [Function] } }
-             
-You can inspect each class separately. For each method that has been "advised," the advice is collected in one array for each of the four types of advice. We can see above that four methods have been given `around` advice. The `default` holds the original method's body. In some cases, there is no original method. For example:
-
-    class Animal
-      isAnimal: ->
-        true
-    
-    class Dog extends Animal
-
-    YouAreDaChef(Dog)
-      .after 'isAnimal', ->
-        console?.log "Poor man's debugger says, 'isAnimal was called'"
-        
-In this case, there is no `isAnimal` method for `Dog`, but YouAreDaChef must not advise `Animal::isAnimal`, so it manufactures a "synthetic" `isAnimal` default for `Dog` that simply calls `super`. You can discover this by inspecting the advice in your debugger. To make debugging even easier, YouAreDaChef also supports *named advice*. Instead of providing an advice function, provide a hash with one or more names and advice functions:
-
-    class Cat extends Animal
-
-    YouAreDaChef(Cat)
-      .before 'isAnimal',
-        logger: -> 
-          console?.log "Poor man's debugger says, 'purr'"
-          
-    YouAreDaChef.inspect(Cat)
-      => { isAnimal: 
-           { before: [ { logger: [Function] } ],
-             after: [],
-             around: [],
-             guard: [],
-             default: [Function] } }
-
-This makes it much easier to keep track of the advice you have provided. Since you have the advice and can inspect it, you can write unit tests for your advice and debug the advice you have provided more easily. The `.inspect` function does add some code complexity to the YouAreDaChef library, but it makes writing and debugging code written with the YouAreDaChef library much easier.
+That's often the case, but starting with version 1.0, YouAreDaChef is designed to make code that's easy to write, not just easy to read. Instead of blindly patching methods with wrapper functions, YouAreDaChef stores all of the "advice" functions in a special data structure in the class. You can inspect each class separately. You can provide names for the advice you add to methods, which makes it easier to keep track of the advice you have provided. Since you have the advice and can inspect it, you can write unit tests for your advice and debug the advice you have provided more easily. The `.inspect` function does add some code complexity to the YouAreDaChef library, but it makes writing and debugging code written with the YouAreDaChef library much easier.
 
 Can I use it with pure Javascript?
 ---

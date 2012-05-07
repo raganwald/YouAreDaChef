@@ -2,7 +2,7 @@
   "author": "Reg Braithwaite <raganwald@gmail.com> (http://braythwayt.com)",
   "name": "YouAreDaChef",
   "description": "Coffeescript/Javascript method combinations",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://github.com/raganwald/YouAreDaChef",
   "repository": {
     "type": "git",

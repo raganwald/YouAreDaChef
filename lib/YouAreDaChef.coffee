@@ -159,17 +159,18 @@ _.each ['default', 'before', 'around', 'after', 'guard'], (verb) ->
       @advise verb, advice, @namespace(), pointcut_exprs
     else throw "What do I do with #{args} for #{verb}?"
     this
-    
+
 Combinator::def = Combinator::define = Combinator::default
+Combinator::tag = Combinator::namespace
 
 YouAreDaChef = (args...) ->
   new Combinator(args...)
 
-_.each ['for', 'namespace', 'clazzes'], (definition_method_name) ->
+_.each ['for', 'namespace', 'clazzes', 'tag'], (definition_method_name) ->
   YouAreDaChef[definition_method_name] = (args...) ->
     _.tap new Combinator(), (combinator) ->
       combinator[definition_method_name](args...)
-      
+
 _.extend YouAreDaChef,
   inspect: (clazz) ->
     clazz.__YouAreDaChef

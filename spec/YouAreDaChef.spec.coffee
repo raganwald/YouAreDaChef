@@ -371,5 +371,19 @@ describe 'euphemisms', ->
 
     expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
     expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
+
+  it "should allow namespaces as the default argument", ->
+
+    YouAreDaChef
+      .namespace('baz')
+      .for(@Foo)
+        .def
+          something: ->
+      .for(@Bar)
+        .define
+          awful: ->
+
+    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
+    expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
   
   
