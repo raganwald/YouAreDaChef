@@ -112,8 +112,8 @@ describe 'YouAreDaChef', ->
         @name = "Harry the Hoofer"
 
     expect( YouAreDaChef.inspect(Pony).move ).toBeTruthy()
-    expect( YouAreDaChef.inspect(Pony).move ).toBeAn(Array)
-    expect( YouAreDaChef.inspect(Pony).move?.before?[0]?.rename ).toBeTruthy()
+    expect( YouAreDaChef.inspect(Pony).move.before ).toBeAn(Array)
+    expect( _.flatten(_.map(YouAreDaChef.inspect(Pony).move.before, _.keys)) ).toInclude('rename')
 
     expect(pat.move()).toBe('Harry the Hoofer moved 30m.')
     expect(pat.name).toBe("Harry the Hoofer")
@@ -143,8 +143,8 @@ describe 'YouAreDaChef', ->
         @name = 'Sly the Slitherer'
 
     expect( YouAreDaChef.inspect(Snake).move ).toBeTruthy()
-    expect( YouAreDaChef.inspect(Snake).move ).toBeAn(Array)
-    expect( YouAreDaChef.inspect(Snake).move?.after?[0]?.rename ).toBeTruthy()
+    expect( YouAreDaChef.inspect(Snake).move.after ).toBeAn(Array)
+    expect( _.flatten(_.map(YouAreDaChef.inspect(Snake).move.after, _.keys)) ).toInclude('rename')
 
     expect(sam.move()).toBe('Sammy the Python moved 5m.')
     expect(sam.name).toBe("Sly the Slitherer")
@@ -197,26 +197,26 @@ describe 'YouAreDaChef', ->
         named_advice: (meters) -> "#{@name} sauntered #{meters}m."
 
     expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
-    
+
 class Nag extends Horse
-    
+
 describe 'namespaces', ->
-  
+
   it 'should namespace anonymous advices', ->
-    
+
     YouAreDaChef(Nag)
       .namespace('namu')
       .before 'move', ->
         # do nothing
-        
-    expect( _.keys(YouAreDaChef.inspect(Nag).move.before[0]) ).toInclude('namu: 1')
-  
+
+    expect( _.flatten(_.map(YouAreDaChef.inspect(Nag).move.before, _.keys)) ).toInclude('namu: 1')
+
   it 'should namespace named advices', ->
-    
+
     YouAreDaChef(Nag)
       .namespace('namu')
       .before 'move',
         descriptor: ->
           # do nothing
-        
-    expect( _.keys(YouAreDaChef.inspect(Nag).move.before[0]) ).toInclude('namu: descriptor')
+
+    expect( _.flatten(_.map(YouAreDaChef.inspect(Nag).move.before, _.keys)) ).toInclude('namu: descriptor')
