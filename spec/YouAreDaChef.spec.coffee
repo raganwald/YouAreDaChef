@@ -113,7 +113,7 @@ describe 'YouAreDaChef', ->
 
     expect( YouAreDaChef.inspect(Pony).move ).toBeTruthy()
     expect( YouAreDaChef.inspect(Pony).move.before ).toBeAn(Array)
-    expect( _.flatten(_.map(YouAreDaChef.inspect(Pony).move.before, _.keys)) ).toInclude('rename')
+    expect(_.map(YouAreDaChef.inspect(Pony).move.before, _.first) ).toInclude('rename')
 
     expect(pat.move()).toBe('Harry the Hoofer moved 30m.')
     expect(pat.name).toBe("Harry the Hoofer")
@@ -144,7 +144,7 @@ describe 'YouAreDaChef', ->
 
     expect( YouAreDaChef.inspect(Snake).move ).toBeTruthy()
     expect( YouAreDaChef.inspect(Snake).move.after ).toBeAn(Array)
-    expect( _.flatten(_.map(YouAreDaChef.inspect(Snake).move.after, _.keys)) ).toInclude('rename')
+    expect( _.map(YouAreDaChef.inspect(Snake).move.after, _.first) ).toInclude('rename')
 
     expect(sam.move()).toBe('Sammy the Python moved 5m.')
     expect(sam.name).toBe("Sly the Slitherer")
@@ -199,6 +199,8 @@ describe 'YouAreDaChef', ->
     expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
 
 class Nag extends Horse
+class Arabian extends Horse
+  mane: -> 'long'
 
 describe 'namespaces', ->
 
@@ -209,7 +211,7 @@ describe 'namespaces', ->
       .before 'move', ->
         # do nothing
 
-    expect( _.flatten(_.map(YouAreDaChef.inspect(Nag).move.before, _.keys)) ).toInclude('namu: 1')
+    expect( _.map(YouAreDaChef.inspect(Nag).move.before, _.first) ).toInclude('namu: 1')
 
   it 'should namespace named advices', ->
 
@@ -219,4 +221,38 @@ describe 'namespaces', ->
         descriptor: ->
           # do nothing
 
-    expect( _.flatten(_.map(YouAreDaChef.inspect(Nag).move.before, _.keys)) ).toInclude('namu: descriptor')
+    expect( _.map(YouAreDaChef.inspect(Nag).move.before, _.first) ).toInclude('namu: descriptor')
+
+describe 'bulk advice syntax', ->
+
+  it 'should not regress to prohibit classic definition of a new default', ->
+
+    YouAreDaChef(Nag)
+      .namespace('bulk')
+      .default 'baz', -> 'baz'
+
+
+  it 'should support default advice', ->
+
+    n = new Nag 'en'
+    YouAreDaChef(Nag)
+      .namespace('bulk')
+      .default
+        foo: -> 'f.u.'
+        bar: -> 'barre'
+
+    expect(n).toRespondTo('foo', 'bar')
+    expect(n.foo()).toEqual('f.u.')
+
+  it 'should support before advice', ->
+
+    arab = new Arabian 'annoy'
+    YouAreDaChef(Arabian)
+      .namespace('bulk')
+      .before
+        mane: ->
+          @maned = true
+
+    expect(arab.maned).toBeFalsy()
+    expect( arab.mane() ).toEqual('long')
+    expect(arab.maned).toBeTruthy()
