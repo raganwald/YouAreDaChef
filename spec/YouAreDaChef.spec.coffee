@@ -197,6 +197,18 @@ describe 'YouAreDaChef', ->
         named_advice: (meters) -> "#{@name} sauntered #{meters}m."
 
     expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
+    
+  it 'should allow defeault definition of a new method without a superclass', ->
+    
+    class Mumps
+      
+    YouAreDaChef(Mumps)
+      .after
+        foo: ->
+      .default
+        foo: ->
+          
+    expect(new Mumps().foo()).toBeFalsy()
 
 class Nag extends Horse
 class Arabian extends Horse

@@ -72,13 +72,15 @@ _.defaults this,
           # this patches the original method to call advices and pass match data
           unless clazz.prototype.hasOwnProperty(name) and daemonology.default?
             if _.include(_.keys(clazz.prototype), name)
-              daemonology.default = ['!', clazz.prototype[name]]
+              daemonology.default = ['', clazz.prototype[name]]
             else if clazz.__super__?
-              daemonology.default = ['!', (args...) ->
+              daemonology.default = ['', (args...) ->
                 clazz.__super__[name].apply(this, args)
               ]
             else
-              throw 'No method or superclass given ' + name
+              daemonology.default = ['!', (args...) ->
+                throw 'No method or superclass defined for ' + name
+              ]
             clazz.prototype[name] = (args...) ->
               if clazz.prototype["guard_#{name}_daemon"].apply(this, args)
                 clazz.prototype["before_#{name}_daemon"].apply(this, args)
