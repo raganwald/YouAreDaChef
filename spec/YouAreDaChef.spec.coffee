@@ -1,4 +1,4 @@
-YouAreDaChef = require('../lib/YouAreDaChef.coffee').YouAreDaChef
+{YouAreDaChef} = require('../lib/YouAreDaChef')
 _ = require 'underscore'
 require "UnderscoreMatchersForJasmine"
 
@@ -58,37 +58,37 @@ abe = new Assyrian "Abraham"
 describe 'YouAreDaChef', ->
 
   it 'should preserve the order of multiple parameters', ->
-
+  
     first = 'first'
     second = 'second'
-
+  
     YouAreDaChef(Tiger)
       .after 'felineinate', (a, b) ->
         expect( a ).toBe(first)
         expect( b ).toBe(second)
-
+  
     kat.felineinate(first, second)
-
+  
   it 'shouldn\'t introduce a spurious method', ->
-
+  
     class Pig extends Animal
-
+  
     class PotBelliedPig extends Pig
-
+  
     # we introduce advice in the leaf class
     YouAreDaChef(PotBelliedPig).before 'move', ->
       @name = "A Vietnamese Pot-Bellied Pig named #{@name}"
-
+  
     # and then we introduce advice in its parent
     YouAreDaChef(Pig).before 'move', ->
       @name = @name.toUpperCase()
-
+  
     piggie = new Pig('Piggie')
-
+  
     expect(piggie.move(10)).toBe('PIGGIE moved 10m.')
-
+  
     porkie = new PotBelliedPig('Porky')
-
+  
     expect(porkie.move(10)).toBe('A VIETNAMESE POT-BELLIED PIG NAMED PORKY moved 10m.')
 
   it 'should allow before advice', ->
@@ -96,8 +96,9 @@ describe 'YouAreDaChef', ->
     expect(tom.move()).toBe('Tommy the Palomino moved 45m.')
     expect(tom.name).toBe("Tommy the Palomino")
 
-    YouAreDaChef(Horse).before 'move', ->
-      @name = "Harry the Hoofer"
+    YouAreDaChef(Horse)
+      .before 'move', ->
+        @name = "Harry the Hoofer"
 
     expect(tom.move()).toBe('Harry the Hoofer moved 45m.')
     expect(tom.name).toBe("Harry the Hoofer")
@@ -197,17 +198,17 @@ describe 'YouAreDaChef', ->
         named_advice: (meters) -> "#{@name} sauntered #{meters}m."
 
     expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
-    
+
   it 'should allow defeault definition of a new method without a superclass', ->
-    
+
     class Mumps
-      
+
     YouAreDaChef(Mumps)
       .after
         foo: ->
       .default
         foo: ->
-          
+
     expect(new Mumps().foo()).toBeFalsy()
 
 class Nag extends Horse
@@ -268,48 +269,46 @@ describe 'bulk advice syntax', ->
     expect(arab.maned).toBeFalsy()
     expect( arab.mane() ).toEqual('long')
     expect(arab.maned).toBeTruthy()
-    
+
 describe 'fluent syntax', ->
-  
+
   beforeEach ->
-    
+
     class @Foo
     class @Bar
-    class @Baz
-      
+
     @foo = new @Foo()
     @bar = new @Bar()
-    @baz = new @Baz()
-  
+
   it 'should support a single class', ->
-    
+
     expect(@foo).not.toRespondTo('something')
-    
+
     YouAreDaChef
       .for(@Foo)
         .default
           something: ->
-            
+
     expect(@foo).toRespondTo('something')
-    
+
   it 'should support multiple classes', ->
-    
+
     expect(@foo).not.toRespondTo('something')
     expect(@bar).not.toRespondTo('something')
-    
+
     YouAreDaChef
       .for(@Foo, @Bar)
         .default
           something: ->
-            
+
     expect(@foo).toRespondTo('something')
     expect(@bar).toRespondTo('something')
-    
+
   it 'should support changing classes', ->
-    
+
     expect(@foo).not.toRespondTo('something', 'awful')
     expect(@bar).not.toRespondTo('something', 'awful')
-    
+
     YouAreDaChef
       .for(@Foo)
         .default
@@ -317,8 +316,22 @@ describe 'fluent syntax', ->
       .for(@Bar)
         .default
           awful: ->
-            
+
     expect(@foo).toRespondTo('something')
     expect(@foo).not.toRespondTo('awful')
     expect(@bar).not.toRespondTo('something')
     expect(@bar).toRespondTo('awful')
+
+  it 'should preserve namespaces', ->
+
+    YouAreDaChef
+      .namespace('baz')
+      .for(@Foo)
+        .default
+          something: ->
+      .for(@Bar)
+        .default
+          awful: ->
+
+    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
+    expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
