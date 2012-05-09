@@ -56,7 +56,6 @@ class Combinator
         unless clazz.prototype.hasOwnProperty("before_#{name}_daemon")
 
           clazz.prototype["before_#{name}_daemon"] = (args...) ->
-            # console?.log "before_#{name}_daemon", daemonology.before
             daemon_args = inject.concat args
             # try a super-daemon if available
             # execute specific daemons for side-effects
@@ -66,7 +65,6 @@ class Combinator
             clazz.__super__?["before_#{name}_daemon"]?.apply(this, args)
 
           clazz.prototype["after_#{name}_daemon"] = (args...) ->
-            # console?.log "after_#{name}_daemon", daemonology.after
             daemon_args = inject.concat args
             # try a super-daemon if available
             clazz.__super__?["after_#{name}_daemon"]?.apply(this, args)
@@ -75,7 +73,6 @@ class Combinator
               daemon[1].apply(this, daemon_args)
 
           clazz.prototype["around_#{name}_daemon"] = (default_fn, args...) ->
-            # console?.log "around_#{name}_daemon", daemonology.around
             daemon_args = inject.concat args
             fn_list = []
             # try a super-daemon if available
@@ -89,17 +86,9 @@ class Combinator
               (args...) -> advice.call(this, acc, daemon_args...)
             , (args...) =>
               default_fn.apply(this, args)
-              # daemon = daemonology.default
-              # if _.isFunction(daemon)
-              #   daemon.apply(this, args)
-              # else if _.isArray(daemon)
-              #   daemon[1].apply(this, args)
-              # else for throw_me_away, advice of daemon
-              #   advice.apply(this, args)
             fn.apply(this, args)
 
           clazz.prototype["guard_#{name}_daemon"] = (args...) ->
-            # console?.log "guard_#{name}_daemon", daemonology.guard
             daemon_args = inject.concat args
             # try a super-daemon if available
             if clazz.__super__?["guard_#{name}_daemon"]?
@@ -151,9 +140,11 @@ class Combinator
           if match_data = name.match(expr)
             daemonize name, match_data
       else
-        _.each pointcut_exprs, (expr) ->
-          if _.isString(expr)
-            daemonize expr
+        _.each pointcut_exprs, (name) ->
+          if _.isString(name)
+            if verb is 'default' and !clazz.prototype["before_#{name}_daemon"] and _.isFunction(advice) # not hasOwnProperty, anywhere in the chain!
+                clazz.prototype[name] = advice
+            else daemonize name
           else throw 'Specify a pointcut with a single regular expression or a list of strings'
 
       clazz.__YouAreDaChef

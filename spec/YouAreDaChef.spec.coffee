@@ -321,20 +321,6 @@ describe 'fluent syntax', ->
     expect(@bar).not.toRespondTo('something')
     expect(@bar).toRespondTo('awful')
 
-  it 'should preserve namespaces', ->
-
-    YouAreDaChef
-      .namespace('baz')
-      .for(@Foo)
-        .default
-          something: ->
-      .for(@Bar)
-        .default
-          awful: ->
-
-    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
-    expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
-
   it 'should support compound syntax', ->
 
     expect(@foo).not.toRespondTo('something')
@@ -345,7 +331,6 @@ describe 'fluent syntax', ->
           something: ->
 
     expect(@foo).toRespondTo('something')
-    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
     
 describe 'euphemisms', ->
 
@@ -368,8 +353,8 @@ describe 'euphemisms', ->
         .define
           awful: ->
 
-    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
-    expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
+    expect(@foo).toRespondTo('something')
+    expect(@bar).toRespondTo('awful')
 
   it "should allow namespaces as the default argument", ->
 
@@ -382,8 +367,8 @@ describe 'euphemisms', ->
         .define
           awful: ->
 
-    expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
-    expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
+    expect(@foo).toRespondTo('something')
+    expect(@bar).toRespondTo('awful')
     
 describe 'syntax 2.0', ->
 
