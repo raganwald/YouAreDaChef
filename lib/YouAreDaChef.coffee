@@ -2,6 +2,8 @@ _ = require 'underscore'
 
 class Combinator
   constructor: (args...) ->
+    @clazzes []
+    @methods []
     @for(args...)
     this
 
@@ -39,9 +41,9 @@ class Combinator
         else throw "What do I do with { #{@namespace()}: #{clazz_arg} }?"
     this
 
-  advise: (verb, advice, namespace, pointcut_exprs) ->
-    throw "Need to define one or more classes" unless @clazzes().length
-    _.each @clazzes(), (clazz) ->
+  advise: (verb, advice, namespace, clazzes, pointcut_exprs) ->
+    throw "Need to define one or more classes" unless clazzes.length
+    _.each clazzes, (clazz) ->
       daemonize = (name, inject = []) ->
         daemonology = (clazz.__YouAreDaChef ?= {})[name] ?= {}
         _.defaults daemonology,
@@ -159,23 +161,29 @@ class Combinator
 _.each ['default', 'before', 'around', 'after', 'guard'], (verb) ->
   Combinator.prototype[verb] = (args...) ->
     if args.length is 1
-      # bulk syntax
-      for own expr, advice of args[0]
-        @advise verb, advice, @namespace(), [expr]
+      if _.isFunction(args[0])
+        # default syntax
+        @advise verb, args[0], @namespace(), @clazzes(), @methods()
+      else
+        # bulk syntax
+        for own expr, advice of args[0]
+          @advise verb, advice, @namespace(), @clazzes(), [expr]
     else if args.length > 1 and _.isString(args[0]) or args[0] instanceof RegExp
       # classic syntax
       [pointcut_exprs..., advice] = args
-      @advise verb, advice, @namespace(), pointcut_exprs
+      @advise verb, advice, @namespace(), @clazzes(), pointcut_exprs
     else throw "What do I do with #{args} for #{verb}?"
     this
 
 Combinator::def = Combinator::define = Combinator::default
 Combinator::tag = Combinator::namespace
+Combinator::method = Combinator::methods
+Combinator::clazz = Combinator::clazzes
 
 YouAreDaChef = (args...) ->
   new Combinator(args...)
 
-_.each ['for', 'namespace', 'clazzes', 'tag'], (definition_method_name) ->
+_.each ['for', 'namespace', 'clazz', 'method', 'clazzes', 'methods', 'tag'], (definition_method_name) ->
   YouAreDaChef[definition_method_name] = (args...) ->
     _.tap new Combinator(), (combinator) ->
       combinator[definition_method_name](args...)

@@ -244,7 +244,6 @@ describe 'bulk advice syntax', ->
       .namespace('bulk')
       .default 'baz', -> 'baz'
 
-
   it 'should support default advice', ->
 
     n = new Nag 'en'
@@ -336,7 +335,7 @@ describe 'fluent syntax', ->
     expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
     expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
 
-  it 'should support compount syntax', ->
+  it 'should support compound syntax', ->
 
     expect(@foo).not.toRespondTo('something')
 
@@ -385,5 +384,56 @@ describe 'euphemisms', ->
 
     expect(YouAreDaChef.inspect(@Foo).something.default[1][0]).toBe('baz: 2')
     expect(YouAreDaChef.inspect(@Bar).awful.default[1][0]).toBe('baz: 2')
-  
-  
+    
+describe 'syntax 2.0', ->
+
+  beforeEach ->
+
+    class @Foo
+      a: ->
+      b: ->
+      c: ->
+    class @Bar
+      b: ->
+      c: ->
+      d: ->
+
+    @foo = new @Foo()
+    @bar = new @Bar()
+
+  it "should nest method under clazz", ->
+
+    YouAreDaChef('baz')
+      .clazz(@Foo)
+        .method('b')
+          .after ->
+            @value = 'beagh'
+      .clazz(@Bar)
+        .method('b')
+          .after ->
+            @value = 'bee'
+            
+    @foo.b()
+    @bar.b()
+
+    expect(@foo.value).toEqual('beagh')
+
+    expect(@bar.value).toEqual('bee')
+
+  it "should nest clazz under method", ->
+
+    YouAreDaChef('baz')
+      .method('b')
+        .clazz(@Foo)
+          .after ->
+            @value = 'beagh'
+        .clazz(@Bar)
+          .after ->
+            @value = 'bee'
+            
+    @foo.b()
+    @bar.b()
+
+    expect(@foo.value).toEqual('beagh')
+
+    expect(@bar.value).toEqual('bee')
