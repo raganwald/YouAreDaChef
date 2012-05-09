@@ -17,17 +17,26 @@ class Combinator
       this
     else @_clazzes
 
+  methods: (args...) ->
+    if args.length > 0
+      @_methods = args
+      this
+    else @_methods
+
   for: (args...) ->
     if args.length > 0 and _.all(args, _.isFunction)
       @clazzes(args...)
     else if args.length is 1
-      @namespace( _.keys(args[0])[0] )
-      clazz_arg = args[0][@namespace()]
-      if _.isArray(clazz_arg)
-        @clazzes(clazz_arg...)
-      else if _.isFunction(clazz_arg)
-        @clazzes(clazz_arg)
-      else throw "What do I do with { #{@namespace()}: #{ } }?"
+      if _.isString(args[0])
+        @namespace( args[0] )
+      else
+        @namespace( _.keys(args[0])[0] )
+        clazz_arg = args[0][@namespace()]
+        if _.isArray(clazz_arg)
+          @clazzes(clazz_arg...)
+        else if _.isFunction(clazz_arg)
+          @clazzes(clazz_arg)
+        else throw "What do I do with { #{@namespace()}: #{clazz_arg} }?"
     this
 
   advise: (verb, advice, namespace, pointcut_exprs) ->
