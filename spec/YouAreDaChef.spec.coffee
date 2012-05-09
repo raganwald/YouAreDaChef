@@ -199,7 +199,7 @@ describe 'YouAreDaChef', ->
 
     expect(abe.move(5)).toBe("Rumplestiltskin sauntered 5m.")
 
-  it 'should allow defeault definition of a new method without a superclass', ->
+  it 'should allow default definition of a new method without a superclass', ->
 
     class Mumps
 
@@ -422,3 +422,46 @@ describe 'syntax 2.0', ->
     expect(@foo.value).toEqual('beagh')
 
     expect(@bar.value).toEqual('bee')
+    
+describe 'Old Sküle Inheritence', ->
+  
+  beforeEach ->
+    
+    @Ungulate = (@name) ->
+    
+    @Ungulate::getName = -> @name
+      
+    @Camel = (@name) ->
+      
+    @Camel.prototype = new @Ungulate()
+      
+  it 'should inherit methods', ->
+    
+    expect( new @Camel('dromedary').getName() ).toEqual('dromedary')
+    
+  it 'should allow us to define a superclass method', ->
+    
+    YouAreDaChef
+      .clazz(@Ungulate)
+        .define
+          doubleName: -> @name + @name
+    
+    expect( new @Camel('dromedary').doubleName() ).toEqual('dromedarydromedary')
+    
+  it 'should allow us to decorate a superclass method in a subclass', ->
+    
+    YouAreDaChef
+      .clazz(@Camel)
+        .before
+          getName: -> @name = @name + @name
+    
+    expect( new @Camel('dromedary').getName() ).toEqual('dromedarydromedary')
+    
+  it 'should allow us to decorate a method in a superclass', ->
+    
+    YouAreDaChef
+      .clazz(@Ungulate)
+        .before
+          getName: -> @name = @name + @name
+    
+    expect( new @Camel('dromedary').getName() ).toEqual('dromedarydromedary')

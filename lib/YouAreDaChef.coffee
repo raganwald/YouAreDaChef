@@ -106,6 +106,10 @@ class Combinator
             daemonology.default.push ['Combinator: 1', (args...) ->
               clazz.__super__[name].apply(this, args)
             ]
+          else if clazz::__proto__?
+            daemonology.default.push ['Combinator: 1', (args...) ->
+              clazz::__proto__[name].apply(this, args)
+            ]
           else
             daemonology.default.push ['Combinator: 1', (args...) ->
               throw 'No method or superclass defined for ' + name
