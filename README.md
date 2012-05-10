@@ -46,10 +46,14 @@ You can even use regular expressions to specify pointcuts:
     
     YouAreDaChef(EnterpriseyLegume)
     
-      .around /set(.*)/, (pointcut, match, value) ->
-        performTransaction () ->
-          writeToLog "#{match[1]}: #{value}"
-          pointcut(value)
+      .methods(/set(.*)/)
+    
+        .after (match, value) ->
+          writeToLog "#{match[1]} set to: #{value}"
+    
+        .around (pointcut, match, value) ->
+          performTransaction () ->
+            pointcut(value)
     
 
 Is it any good?

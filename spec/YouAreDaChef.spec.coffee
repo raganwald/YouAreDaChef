@@ -58,37 +58,37 @@ abe = new Assyrian "Abraham"
 describe 'YouAreDaChef', ->
 
   it 'should preserve the order of multiple parameters', ->
-  
+
     first = 'first'
     second = 'second'
-  
+
     YouAreDaChef(Tiger)
       .after 'felineinate', (a, b) ->
         expect( a ).toBe(first)
         expect( b ).toBe(second)
-  
+
     kat.felineinate(first, second)
-  
+
   it 'shouldn\'t introduce a spurious method', ->
-  
+
     class Pig extends Animal
-  
+
     class PotBelliedPig extends Pig
-  
+
     # we introduce advice in the leaf class
     YouAreDaChef(PotBelliedPig).before 'move', ->
       @name = "A Vietnamese Pot-Bellied Pig named #{@name}"
-  
+
     # and then we introduce advice in its parent
     YouAreDaChef(Pig).before 'move', ->
       @name = @name.toUpperCase()
-  
+
     piggie = new Pig('Piggie')
-  
+
     expect(piggie.move(10)).toBe('PIGGIE moved 10m.')
-  
+
     porkie = new PotBelliedPig('Porky')
-  
+
     expect(porkie.move(10)).toBe('A VIETNAMESE POT-BELLIED PIG NAMED PORKY moved 10m.')
 
   it 'should allow before advice', ->
@@ -122,17 +122,6 @@ describe 'YouAreDaChef', ->
   it 'should allow inspection', ->
 
     expect( YouAreDaChef.inspect(Horse) ).toEqual(Horse.__YouAreDaChef)
-
-  it 'should allow guard advice', ->
-
-    expect(leo.move(40)).toBe('Leo the Lionheart moved 40m.')
-    expect(leo.move(400)).toBe('Leo the Lionheart moved 400m.')
-
-    YouAreDaChef(Lion).guard 'move', (meters) ->
-      meters < 100
-
-    expect(leo.move(40)).toBe('Leo the Lionheart moved 40m.')
-    expect(leo.move(400)).toBeUndefined()
 
   it 'should allow after advice', ->
 
@@ -331,7 +320,7 @@ describe 'fluent syntax', ->
           something: ->
 
     expect(@foo).toRespondTo('something')
-    
+
 describe 'euphemisms', ->
 
   beforeEach ->
@@ -369,7 +358,7 @@ describe 'euphemisms', ->
 
     expect(@foo).toRespondTo('something')
     expect(@bar).toRespondTo('awful')
-    
+
 describe 'syntax 2.0', ->
 
   beforeEach ->
@@ -397,7 +386,7 @@ describe 'syntax 2.0', ->
         .method('b')
           .after ->
             @value = 'bee'
-            
+
     @foo.b()
     @bar.b()
 
@@ -415,53 +404,103 @@ describe 'syntax 2.0', ->
         .clazz(@Bar)
           .after ->
             @value = 'bee'
-            
+
     @foo.b()
     @bar.b()
 
     expect(@foo.value).toEqual('beagh')
 
     expect(@bar.value).toEqual('bee')
-    
+
 describe 'Old Sküle Inheritence', ->
-  
+
   beforeEach ->
-    
+
     @Ungulate = (@name) ->
-    
+
     @Ungulate::getName = -> @name
-      
+
     @Camel = (@name) ->
-      
+
     @Camel.prototype = new @Ungulate()
-      
+
   it 'should inherit methods', ->
-    
+
     expect( new @Camel('dromedary').getName() ).toEqual('dromedary')
-    
+
   it 'should allow us to define a superclass method', ->
-    
+
     YouAreDaChef
       .clazz(@Ungulate)
         .define
           doubleName: -> @name + @name
-    
+
     expect( new @Camel('dromedary').doubleName() ).toEqual('dromedarydromedary')
-    
+
   it 'should allow us to decorate a superclass method in a subclass', ->
-    
+
     YouAreDaChef
       .clazz(@Camel)
         .before
           getName: -> @name = @name + @name
-    
+
     expect( new @Camel('dromedary').getName() ).toEqual('dromedarydromedary')
-    
+
   it 'should allow us to decorate a method in a superclass', ->
-    
+
     YouAreDaChef
       .clazz(@Ungulate)
         .before
           getName: -> @name = @name + @name
-    
+
     expect( new @Camel('dromedary').getName() ).toEqual('dromedarydromedary')
+
+describe 'filters', ->
+
+  beforeEach ->
+
+    class @Bean
+      setValue: (@value) -> @value
+      getValue: -> @value
+
+    @java = new @Bean()
+
+  it 'should allow guard advice', ->
+
+    YouAreDaChef(@Bean).guard 'setValue', (v) -> !isNaN(v)
+
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue('fubar')).toBeUndefined()
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue(42)).toBe(42)
+    expect(@java.getValue()).toBe(42)
+
+  it 'should allow when advice', ->
+
+    YouAreDaChef(@Bean).when 'setValue', (v) -> !isNaN(v)
+
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue('fubar')).toBeUndefined()
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue(42)).toBe(42)
+    expect(@java.getValue()).toBe(42)
+
+  it 'should allow unless advice', ->
+
+    YouAreDaChef(@Bean).unless 'setValue', isNaN
+
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue('fubar')).toBeUndefined()
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue(42)).toBe(42)
+    expect(@java.getValue()).toBe(42)
+
+  it 'should allow except_when advice', ->
+
+    YouAreDaChef(@Bean).except_when 'setValue', isNaN
+
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue('fubar')).toBeUndefined()
+    expect(@java.getValue()).toBeUndefined()
+    expect(@java.setValue(42)).toBe(42)
+    expect(@java.getValue()).toBe(42)

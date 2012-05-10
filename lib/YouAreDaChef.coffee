@@ -42,6 +42,11 @@ class Combinator
     this
 
   advise: (verb, advice, namespace, clazzes, pointcut_exprs) ->
+    if verb is 'unless'
+      verb = 'guard'
+      _advice = advice
+      advice = (args...) ->
+        !_advice.apply(this, args)
     throw "Need to define one or more classes" unless clazzes.length
     _.each clazzes, (clazz) ->
       daemonize = (name, inject = []) ->
@@ -153,7 +158,7 @@ class Combinator
 
       clazz.__YouAreDaChef
 
-_.each ['default', 'before', 'around', 'after', 'guard'], (verb) ->
+_.each ['default', 'before', 'around', 'after', 'guard', 'unless'], (verb) ->
   Combinator.prototype[verb] = (args...) ->
     if args.length is 1
       if _.isFunction(args[0])
@@ -171,6 +176,8 @@ _.each ['default', 'before', 'around', 'after', 'guard'], (verb) ->
     this
 
 Combinator::def = Combinator::define = Combinator::default
+Combinator::when = Combinator::guard
+Combinator::except_when = Combinator::unless
 Combinator::tag = Combinator::namespace
 Combinator::method = Combinator::methods
 Combinator::clazz = Combinator::clazzes
