@@ -15,36 +15,40 @@ This is almost exactly like [controller filters][filters] and [ActiveRecord call
 
 Aspect-Oriented Programming is a *code organization* practice. Its purpose is to separate concerns by responsibility, even when the implementation of that responsibility spans multiple classes or has finer granularity than a method. AOP seeks to avoid *tangling* multiple responsibilities in a single class or method body as well as to avoid *scattering* a single responsibility across several classes.
 
- YouAreDaChef operates on classes constructed in CoffeeScript with the `class` keyword like this:
+YouAreDaChef operates on classes constructed in CoffeeScript with the `class` keyword like this:
 
-	class Muppet
-		name: -> @_name
-			
-	class Animal extends Muppet
-		constructor: (@_name) ->
-		instrument: -> 'drums'
+```coffeescript
+class Muppet
+	name: -> @_name
+		
+class Animal extends Muppet
+	constructor: (@_name) ->
+	instrument: -> 'drums'
+```
 
 YouAreDaChef also operates on functions with prototype chains hand-rolled in standard JavaScript like this:
 
-    var Animal, Muppet;
+```javascript
+var Animal, Muppet;
 
-    Muppet = function() {};
+Muppet = function() {};
 
-    Muppet.prototype.name = function() {
-      return this._name;
-    };
+Muppet.prototype.name = function() {
+  return this._name;
+};
 
-    Animal = function(_name) {
-      this._name = _name;
-    };
+Animal = function(_name) {
+  this._name = _name;
+};
 
-    Animal.prototype = new Muppet();
+Animal.prototype = new Muppet();
 
-    Animal.prototype.instrument = function() {
-      return 'drums';
-    };
+Animal.prototype.instrument = function() {
+  return 'drums';
+};
+```
 
-In this document, the words "class" and "method" will be used regardless of how you choose to implement inheritance, and the examples will be given in CoffeeScript for simplicity.
+In this document, the words "class" and "method" will be used regardless of how you choose to implement inheritance, and the examples will alternate between CoffeeScript and JavaScript.
 
 ### Basic Syntax
 
@@ -52,25 +56,34 @@ Using YouAreDaChef resembles using jQuery. You start with `YouAreDaChef` and the
 
 [cafe]: http://recursiveuniver.se
 
-		class Square
-			initialize: (args...) ->
-				# ...
-			set_memo: (index, square) ->
-				@memoized[index] = square
+```coffeescript
+class Square
+	initialize: (args...) ->
+		# ...
+	set_memo: (index, square) ->
+		@memoized[index] = square
+```
 
 In the [garbage collection][gc] module, YouAreDaChef decorates these methods with before and after advice:
 
 [gc]: http://recursiveuniver.se/docs/gc.html
 
+```coffeescript
     YouAreDaChef
+    
       .clazz(Square)
+      
         .method('initialize')
+        
           .after ->
             @references = 0
+            
         .method('set_memo')
+        
           .before (index) ->
             if (existing = @get_memo(index))
               existing.decrementReference()
+              
           .after (index, square) ->
             square.incrementReference()
             
@@ -80,18 +93,23 @@ As a result, when a Square's `set_memo` method is called, its "before" advice is
 
 ### Some Shortcuts
 
-When you only want to provide one piece of advice to one method, you can use 'compact' syntax for specifying the method name alongside the advice:
+When you only want to provide one piece of advice to one method, you can use 'compact' syntax for specifying the method name as a parameter of the advice:
 
-    YouAreDaChef
-      .clazz(Square)
-        .after 'initialize', ->
-            @references = 0
+```javascript
+YouAreDaChef
+  .clazz(Square)
+    .after('initialize', function() {
+      return this.references = 0;
+    });
+```
 
 You can also save yourself a line of code by treating `YouAreDaChef` as a function (just like `$(...)` in jQuery) and specifying one or more classes as parameters:
 
-    YouAreDaChef(Square)
-      .after 'initialize', ->
-          @references = 0
+```coffeescript
+YouAreDaChef(Square)
+  .after 'initialize', ->
+      @references = 0
+```
           
 Before and after advice is passed the same parameters as the 'default' behaviour, but it executed for its side-effects only. There is no way to alter the parameters passed to the default behaviour or to modify its return value.
 
@@ -99,28 +117,51 @@ Before and after advice is passed the same parameters as the 'default' behaviour
 
 Instead of using a  method name (or list of method names), you can supply a regular expression to specify the method(s) to be advised. The match data will be passed as the first parameter, so it is possible to use match groups in your advice:
 
-    class EnterpriseyLegume
-      setId:         (@id)         ->
-      setName:       (@name)       ->
-      setDepartment: (@department) ->
-      setCostCentre: (@costCentre) ->
-    
-    YouAreDaChef(EnterpriseyLegume)
-      .methods(/set(.*)/)
-        .after (match, value) ->
-          writeToLog "#{match[1]} set to: #{value}"
+```javascript
+EnterpriseyLegume = (function() {
+
+  function EnterpriseyLegume() {}
+
+  EnterpriseyLegume.prototype.setId = function(id) {
+    this.id = id;
+  };
+
+  EnterpriseyLegume.prototype.setName = function(name) {
+    this.name = name;
+  };
+
+  EnterpriseyLegume.prototype.setDepartment = function(department) {
+    this.department = department;
+  };
+
+  EnterpriseyLegume.prototype.setCostCentre = function(costCentre) {
+    this.costCentre = costCentre;
+  };
+
+  return EnterpriseyLegume;
+
+})();
+
+YouAreDaChef(EnterpriseyLegume)
+  .methods(/set(.*)/)
+    .after(function(match, value) {
+      return writeToLog("" + match[1] + " set to: " + value);
+    });
+```
 
 ### Around Advice
 
 Before and after advice are executed for side-effects only. "Around" advice is all-encompassing: It is passed the parameters and the default advice, and it takes care of calling the default advice and deciding what to return. Here is some fictional code that wraps some methods up in a transaction:
 
-    YouAreDaChef(EnterpriseyLegume)
-      .around /set(.*)/, (pointcut, match, value) ->
-        performTransaction () ->
-          writeToLog "#{match[1]}: #{value}"
-          pointcut(value)
+```coffeescript
+YouAreDaChef(EnterpriseyLegume)
+  .around /set(.*)/, (pointcut, match, value) ->
+    performTransaction () ->
+      writeToLog "#{match[1]}: #{value}"
+      pointcut(value)
+```
           
-When multiple around advice is provided, it nests.
+When multiple pieces of around advice are provided, they nest.
 
 ### Guard Advice
 
@@ -133,25 +174,18 @@ Well, YouAreDaChef works *almost* like Ruby on Rails. The one difference is that
 
 If you want to set up a filter, you want *guard advice*:
 
-    YouAreDaChef(EnterpriseyLegume)
-      .when 'setId', (value) ->
-        !isNaN(value)
+```javascript
+YouAreDaChef(EnterpriseyLegume)
+  .when('setId', function(value) {
+    return !isNaN(value);
+  });
+```
         
 `setId` will be aborted if the value passed is not an integer. This pattern of testing for an error and returning the negation of the test value is common, so YouAreDaChef provides a shortcut:
 
-    YouAreDaChef(EnterpriseyLegume)
-      .unless 'setId', isNaN
-      
+```coffeescript
+YouAreDaChef(EnterpriseyLegume)
+  .unless 'setId', (value) -> isNaN(value)
+```
+
 This has the exact same semantics as the `.when` advice, `.setId` will be evaluated unless `isNaN` returns truthy when passed the parameter.
-
-### Installation
-
-    npm install YouAreDaChef
-    
-Or:
-
-    git clone git://github.com/raganwald/YouAreDaChef.git
-    
-Or:
-
-    curl -o YouAreDaChef.zip https://nodeload.github.com/raganwald/YouAreDaChef/zipball/master
