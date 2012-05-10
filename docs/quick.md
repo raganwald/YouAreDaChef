@@ -74,21 +74,18 @@ In the [garbage collection][gc] module, YouAreDaChef decorates these methods wit
       .clazz(Square)
       
         .method('initialize')
-        
           .after ->
             @references = 0
             
         .method('set_memo')
-        
           .before (index) ->
             if (existing = @get_memo(index))
               existing.decrementReference()
-              
           .after (index, square) ->
             square.incrementReference()
 ```
         
-As a result, when a Square's `set_memo` method is called, its "before" advice is executed, then its body or "default" advice is executed, then it's "after" advice is executed. If you define more than one before or after advice, they will all be executed in order.
+As a result, when a Square's `set_memo` method is called, its "before" advice is executed, then its body or "default" advice is executed, then it's "after" advice is executed. If you define more than one before or after advice, they will all be executed in order. Before and after advice is passed the same parameters as the 'default' behaviour, but it executed for its side-effects only. There is no way to alter the parameters passed to the default behaviour or to modify its return value.
 
 **Note**: If you are using inheritance, YouAreDaChef arranges things such that all of the before advice is executed, including the inherited advice, but only the most specific method body or "default" is evaluated. In many cases, you can avoid trying to use a `super` method in a subclass by defining method advice in the subclass instead. This makes your intent easier to understand.
 
@@ -111,8 +108,58 @@ YouAreDaChef(Square)
   .after 'initialize', ->
     @references = 0
 ```
-          
-Before and after advice is passed the same parameters as the 'default' behaviour, but it executed for its side-effects only. There is no way to alter the parameters passed to the default behaviour or to modify its return value.
+
+You can specify more than one class or more than one method. If you are a stickler for English-y method names, you can call either `.clazz` or `.clazzes` and `.method` or `.methods`, like this:
+
+```javascript
+var debug_id = 0;
+
+YouAreDaChef
+  .clazzes(Square, Cell)
+    .after('initialize', function() {
+      debug_id = debug_id + 1;
+      this.debug_id = debug_id;
+    });
+```
+
+And when you want to hand out a lot of the same kind of advice, pass in a hash of methods and advices:
+
+```coffeescript
+    YouAreDaChef
+    
+      .clazz(Square)
+      
+        .before
+          set_memo:(index) ->
+            if (existing = @get_memo(index))
+              existing.decrementReference()
+      
+        .after
+          initialize: ->
+            @references = 0
+          set_memo: (index, square) ->
+            square.incrementReference()
+```
+
+This is equivalent to the example for basic syntax, just organized differently. The purpose of YouAreDaChef is to give you ways to organize your code by responsibility. Thus, it provides multiple ways to declare your advice.
+
+Finally, you can chain as much or as little of your advice together as you want. Just as you can chain advice for different methods or different kinds of advice, you can chain different classes:
+
+```javascript
+var debug_id = 0;
+
+YouAreDaChef
+  .clazz(Cell)
+    .after('initialize', function() {
+      debug_id = debug_id + 1;
+      this.debug_id = "C" + debug_id;
+    });
+  .clazz(Square)
+    .after('initialize', function() {
+      debug_id = debug_id + 1;
+      this.debug_id = "S" + debug_id;
+    });
+```
 
 ### Regular Expressions
 
@@ -157,8 +204,7 @@ Before and after advice are executed for side-effects only. "Around" advice is a
 ```coffeescript
 YouAreDaChef(EnterpriseyLegume)
   .around /set(.*)/, (default_fn, match, value) ->
-    performTransaction () ->
-      writeToLog "#{match[1]}: #{value}"
+    performTransaction ->
       default_fn(value)
 ```
           
@@ -166,14 +212,14 @@ When multiple pieces of around advice are provided, they nest.
 
 ### Guard Advice
 
-Ruby on Rails users are familiar with [controller filters][filters]. YouAreDaChef's before, after, and around advices are just like controller filters, except that in Rails, if a before filter returns something falsey, the request cycle is halted. Likewise, Ruby on Rails provides [callbacks][callbacks] for ActiveRecord models. YouAreDaChef works just like the callback queues, every class inherits the before, after, and around advice of its superclasses (or prototypes).
+Ruby on Rails users are familiar with [controller filters][filters]. YouAreDaChef's before, after, and around advices are like controller filters. Likewise, Ruby on Rails provides [callbacks][callbacks] for ActiveRecord models. YouAreDaChef works just like the callback queues, every class inherits the before, after, and around advice of its superclasses (or prototypes).
 
 [callbacks]: http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html
 [filters]: http://guides.rubyonrails.org/action_controller_overview.html#filters
 
-Well, YouAreDaChef works *almost* like Ruby on Rails. The one difference is that YouAreDaChef doesn't care what before advice returns. `false`, `null`, `undefined`, it doesn't matter and it doesn't halt the function call. This makes the intent crystal clear: before advice is stuff you want to do before the method call, after advice is stuff you want to do after the method call. Always.
+Well, YouAreDaChef works *almost* like Ruby on Rails. The one difference is that YouAreDaChef doesn't care what before advice returns. `false`, `null`, `undefined`, it doesn't matter and it doesn't halt the function call. In Rails, if a before filter returns something falsey, the request cycle is halted.
 
-If you want to set up a filter, you want *guard advice*:
+The behaviour in YouAreDaChef is consistent: before advice is stuff you want to do before the method call, after advice is stuff you want to do after the method call. Always. If you forget to pay attention to what your before advice returns, it won't break your method. But what if you actually want a filter? In that case, you use *guard advice*:
 
 ```javascript
 YouAreDaChef(EnterpriseyLegume)
@@ -186,10 +232,10 @@ YouAreDaChef(EnterpriseyLegume)
 
 ```coffeescript
 YouAreDaChef(EnterpriseyLegume)
-  .unless 'setId', (value) -> isNaN(value)
+  .unless 'setId', (value) -> isNaN(value) # Equivalent to isNaN
 ```
 
-This has the exact same semantics as the `.when` advice, `.setId` will be evaluated unless `isNaN` returns truthy when passed the parameter.
+This has the exact same semantics as the `.when` advice, `.setId` will be evaluated unless the value is not a number.
 
 ### Installation
 
