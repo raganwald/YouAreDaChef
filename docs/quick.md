@@ -2,7 +2,7 @@
 
 ### What YouAreDaChef Does
 
-[YouAreDaChef]yadc is a utility for meta-programming Object-Oriented JavaScript ("JS"). YouAreDaChef supports modifying JavaScript that is written in either a prototype style or a class-oriented style. JavaScript supports extending and redefining methods out of the box. YouAreDaChef takes this further by also supporting [Aspect-Oriented Programming][aop], specifically "decorating" methods with before, after, around, and guard advice.
+[YouAreDaChef][yadc] is a utility for meta-programming Object-Oriented JavaScript ("JS"). YouAreDaChef supports modifying JavaScript that is written in either a prototype style or a class-oriented style. JavaScript supports extending and redefining methods out of the box. YouAreDaChef takes this further by also supporting [Aspect-Oriented Programming][aop], specifically "decorating" methods with before, after, around, and guard advice.
 
 [yadc]: http://github.com/raganwald/YouAreDaChef
 [aop]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
