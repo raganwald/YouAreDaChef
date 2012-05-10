@@ -32,29 +32,14 @@ For example:
             
         .after 'roar', 'draw', ->
             @trigger 'action'
-            
-        .after 'run', ->
-            @trigger 'move'
-            
-You can even use regular expressions to specify pointcuts:
+    
+There must be more to it than that
+---
 
-    class EnterpriseyLegume
-      setId:         (@id)         ->
-      setName:       (@name)       ->
-      setDepartment: (@department) ->
-      setCostCentre: (@costCentre) ->
-    
-    YouAreDaChef(EnterpriseyLegume)
-    
-      .methods(/set(.*)/)
-    
-        .after (match, value) ->
-          writeToLog "#{match[1]} set to: #{value}"
-    
-        .around (pointcut, match, value) ->
-          performTransaction () ->
-            pointcut(value)
-    
+Yes there is, there's also a [Quick Start Guide][qsg].
+
+[qsg]: https://github.com/raganwald/YouAreDaChef/blob/master/docs/quick.md
+
 
 Is it any good?
 ---
@@ -89,7 +74,7 @@ No, but it can make you *appear* smarter. Just explain that *guard advice is a m
     
     YouAreDaChef(EnterpriseyLegume)
     
-      .guard /write(.*)/, ->
+      .when /write(.*)/, ->
         @user.hasPermission('write', match[1])
 
 Guard advice works like a before combination, with the bonus that if it returns something falsely, the pointcut will not be executed. This behaviour is similar to the way ActiveRecord callbacks work.
