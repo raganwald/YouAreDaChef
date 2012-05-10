@@ -2,7 +2,7 @@
 
 ### What YouAreDaChef Does
 
-[YouAreDaChef][yadc] is a utility for meta-programming Object-Oriented JavaScript ("JS"). YouAreDaChef supports modifying JavaScript that is written in either a prototype style or a class-oriented style. JavaScript supports extending and redefining methods out of the box. YouAreDaChef takes this further by also supporting [Aspect-Oriented Programming][aop], specifically "decorating" methods with before, after, around, and guard advice.
+[YouAreDaChef][yadc] is a utility for meta-programming Object-Oriented JavaScript. YouAreDaChef supports modifying JavaScript that is written in either a prototype style or a class-oriented style. JavaScript supports extending and redefining methods out of the box. YouAreDaChef takes this further by also supporting [Aspect-Oriented Programming][aop], specifically "decorating" methods with before, after, around, and guard advice.
 
 [yadc]: http://github.com/raganwald/YouAreDaChef
 [aop]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
@@ -70,6 +70,8 @@ In the [garbage collection][gc] module, YouAreDaChef decorates these methods wit
             
 As a result, when a Square's `set_memo` method is called, its "before" advice is executed, then its body or "default" advice is executed, then it's "after" advice is executed. If you define more than one before or after advice, they will all be executed in order.
 
+**Note**: If you are using inheritance, YouAreDaChef arranges things such that all of the before advice is executed, including the inherited advice, but only the most specific method body or "default" is evaluated. In many cases, you can avoid trying to use a `super` method in a subclass by defining method advice in the subclass instead. This makes your intent easier to understand.
+
 ### Some Shortcuts
 
 When you only want to provide one piece of advice to one method, you can use 'compact' syntax for specifying the method name alongside the advice:
@@ -133,3 +135,5 @@ If you want to set up a filter, you want *guard advice*:
 
     YouAreDaChef(EnterpriseyLegume)
       .unless 'setId', isNaN
+      
+This has the exact same semantics as the `.when` advice, `.setId` will be evaluated unless `isNaN` returns truthy when passed the parameter.
