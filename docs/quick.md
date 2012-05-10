@@ -100,7 +100,7 @@ When you only want to provide one piece of advice to one method, you can use 'co
 YouAreDaChef
   .clazz(Square)
     .after('initialize', function() {
-      return this.references = 0;
+      this.references = 0;
     });
 ```
 
@@ -109,7 +109,7 @@ You can also save yourself a line of code by treating `YouAreDaChef` as a functi
 ```coffeescript
 YouAreDaChef(Square)
   .after 'initialize', ->
-      @references = 0
+    @references = 0
 ```
           
 Before and after advice is passed the same parameters as the 'default' behaviour, but it executed for its side-effects only. There is no way to alter the parameters passed to the default behaviour or to modify its return value.
@@ -146,7 +146,7 @@ EnterpriseyLegume = (function() {
 YouAreDaChef(EnterpriseyLegume)
   .methods(/set(.*)/)
     .after(function(match, value) {
-      return writeToLog("" + match[1] + " set to: " + value);
+      writeToLog("" + match[1] + " set to: " + value);
     });
 ```
 
@@ -156,10 +156,10 @@ Before and after advice are executed for side-effects only. "Around" advice is a
 
 ```coffeescript
 YouAreDaChef(EnterpriseyLegume)
-  .around /set(.*)/, (pointcut, match, value) ->
+  .around /set(.*)/, (default_fn, match, value) ->
     performTransaction () ->
       writeToLog "#{match[1]}: #{value}"
-      pointcut(value)
+      default_fn(value)
 ```
           
 When multiple pieces of around advice are provided, they nest.
