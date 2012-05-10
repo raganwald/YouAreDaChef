@@ -7,6 +7,12 @@
 [yadc]: http://github.com/raganwald/YouAreDaChef
 [aop]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
 
+This is almost exactly like [controller filters][filters] and [ActiveRecord callbacks][callbacks] in Ruby on Rails, but for your JavaScript and [Backbone][bb] objects!
+
+[callbacks]: http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html
+[filters]: http://guides.rubyonrails.org/action_controller_overview.html#filters
+[bb]: http://documentcloud.github.com/backbone/
+
 Aspect-Oriented Programming is a *code organization* practice. Its purpose is to separate concerns by responsibility, even when the implementation of that responsibility spans multiple classes or has finer granularity than a method. AOP seeks to avoid *tangling* multiple responsibilities in a single class or method body as well as to avoid *scattering* a single responsibility across several classes.
 
  YouAreDaChef operates on classes constructed in CoffeeScript with the `class` keyword like this:
