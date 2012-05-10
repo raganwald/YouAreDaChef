@@ -190,3 +190,16 @@ YouAreDaChef(EnterpriseyLegume)
 ```
 
 This has the exact same semantics as the `.when` advice, `.setId` will be evaluated unless `isNaN` returns truthy when passed the parameter.
+
+### Installation
+
+    npm install YouAreDaChef
+
+Or:	
+
+    git clone git://github.com/raganwald/YouAreDaChef.git
+
+Or:
+
+    curl -o YouAreDaChef.zip https://nodeload.github.com/raganwald/YouAreDaChef/zipball/master
+    
