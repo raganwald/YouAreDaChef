@@ -85,7 +85,7 @@ In the [garbage collection][gc] module, YouAreDaChef decorates these methods wit
             square.incrementReference()
 ```
         
-As a result, when a Square's `set_memo` method is called, its "before" advice is executed, then its body or "default" advice is executed, then it's "after" advice is executed. If you define more than one before or after advice, they will all be executed in order. Before and after advice is passed the same parameters as the 'default' behaviour, but it executed for its side-effects only. There is no way to alter the parameters passed to the default behaviour or to modify its return value.
+As a result, when a Square's `set_memo` method is called, its "before" advice is executed, then its body or "default" advice is executed, then its "after" advice is executed. If you define more than one before or after advice, they will all be executed in order. Before and after advice is passed the same parameters as the 'default' behaviour but is executed for its side-effects only. There is no way to alter the parameters passed to the default behaviour or to modify its return value.
 
 **Note**: If you are using inheritance, YouAreDaChef arranges things such that all of the before advice is executed, including the inherited advice, but only the most specific method body or "default" is evaluated. In many cases, you can avoid trying to use a `super` method in a subclass by defining method advice in the subclass instead. This makes your intent easier to understand.
 
