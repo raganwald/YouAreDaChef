@@ -130,7 +130,7 @@ And when you want to hand out a lot of the same kind of advice, pass in a hash o
       .clazz(Square)
       
         .before
-          set_memo:(index) ->
+          set_memo: (index) ->
             if (existing = @get_memo(index))
               existing.decrementReference()
       
@@ -248,4 +248,20 @@ Or:
 Or:
 
     curl -o YouAreDaChef.zip https://nodeload.github.com/raganwald/YouAreDaChef/zipball/master
-    
+
+### Where can I read more?
+
+[YouAreDaChef REAADME][yadc]
+[Separating Concerns in Coffeescript using Aspect-Oriented Programming][blog]  
+[Implementing Garbage Collection in CS/JS with Aspect-Oriented Programming][gc]
+
+[js]: https://github.com/raganwald/YouAreDaChef/blob/master/lib/YouAreDaChef.js
+[gc]: https://github.com/raganwald/homoiconic/blob/master/2012/03/garbage_collection_in_coffeescript.md#readme
+[blog]: https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme
+
+### Et cetera
+
+[YouAreDaChef][yadc]  was created by [Reg "raganwald" Braithwaite][raganwald]. It is available under the terms of the [MIT License][lic].
+
+[raganwald]: http://braythwayt.com
+[lic]: https://github.com/raganwald/YouAreDaChef/blob/master/license.md
