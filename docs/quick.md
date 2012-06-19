@@ -251,7 +251,7 @@ Or:
 
 ### Where can I read more?
 
-[YouAreDaChef REAADME][yadc]
+[YouAreDaChef REAADME][yadc]  
 [Separating Concerns in Coffeescript using Aspect-Oriented Programming][blog]  
 [Implementing Garbage Collection in CS/JS with Aspect-Oriented Programming][gc]
 
