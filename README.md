@@ -96,6 +96,11 @@ Where can I read more?
 [gc]: https://github.com/raganwald/homoiconic/blob/master/2012/03/garbage_collection_in_coffeescript.md#readme
 [blog]: https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme
 
+How to get started
+---
+
+Eat a hearty breakfast. Breakfast is the most important meal of the day! [:-)](https://github.com/facebook/javelin/)
+
 Et cetera
 ---
 
