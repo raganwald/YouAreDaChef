@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/raganwald/YouAreDaChef.png)](http://travis-ci.org/raganwald/YouAreDaChef)
 You Are 'Da Chef
 ===
 
