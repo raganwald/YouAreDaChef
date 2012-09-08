@@ -85,21 +85,28 @@ You can also try making a [cryptic][cry] reference to a [computed][comp], non-lo
 [cry]: http://www.reddit.com/r/programming/comments/m4r4t/aspectoriented_programming_in_coffeescript_with_a/c2yfx6w
 [comp]: http://en.wikipedia.org/wiki/Goto#Computed_GOTO
 
+I might not need all of its awesomeness
+---
+
+Have a look at [method-combinators].
+
+[method-combinators]: https://github.com/raganwald/method-combinators
+
 Where can I read more?
 ---
 
 [Quick Start Guide][qsg]  
-[Separating Concerns in Coffeescript using Aspect-Oriented Programming][blog]  
-[Implementing Garbage Collection in CS/JS with Aspect-Oriented Programming][gc]
+[Separating Concerns in CoffeeScript using Aspect-Oriented Programming][blog]  
+[Implementing Garbage Collection in CS/JS with Aspect-Oriented Programming][gc]  
 
 [js]: https://github.com/raganwald/YouAreDaChef/blob/master/lib/YouAreDaChef.js
 [gc]: https://github.com/raganwald/homoiconic/blob/master/2012/03/garbage_collection_in_coffeescript.md#readme
 [blog]: https://github.com/raganwald/homoiconic/blob/master/2011/11/YouAreDaChef.md#readme
 
-How to get started
+In memoriam
 ---
 
-Eat a hearty breakfast. Breakfast is the most important meal of the day! [:-)](https://github.com/facebook/javelin/)
+YouAreDaChef's method advice is loosely based on Lisp Flavors, specifically the inheritance of `before` and `after` advice plus the overriding of `default` advice (called `daemon` in Flavors). [Dan Weinreb](https://en.wikipedia.org/wiki/Daniel_Weinreb) (d. 2012) played an important role in the development of Lisp. He is missed by many.
 
 Et cetera
 ---
