@@ -36,9 +36,10 @@ For example:
 There must be more to it than that
 ---
 
-Yes there is, there's also a [Quick Start Guide][qsg].
+Yes there is, there's a [Quick Start Guide][qsg] and a discussion of the [special sauce], YouAreDaChef's inheritance model.
 
 [qsg]: https://github.com/raganwald/YouAreDaChef/blob/master/docs/quick.md
+[special sauce]: https://github.com/raganwald/YouAreDaChef/blob/master/docs/special-sauce.md
 
 
 Is it any good?
