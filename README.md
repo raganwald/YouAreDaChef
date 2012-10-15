@@ -109,6 +109,11 @@ In memoriam
 
 YouAreDaChef's method advice is loosely based on Lisp Flavors, specifically the inheritance of `before` and `after` advice plus the overriding of `default` advice (called `daemon` in Flavors). [Dan Weinreb](https://en.wikipedia.org/wiki/Daniel_Weinreb) (d. 2012) played an important role in the development of Lisp. He is missed by many.
 
+post scriptum
+-------------
+
+I'm writing a book called [CoffeeScript Ristretto](http://leanpub.com/coffeescript-ristretto). Check it out!
+
 Et cetera
 ---
 
