@@ -19,7 +19,7 @@
     "underscore": "~1.4.3"
   },
   "devDependencies": {
-    "UnderscoreMatchersForJasmine": "0.0.5",
+    "UnderscoreMatchersForJasmine": "~0.0.5",
     "jasmine-node": "~1.0.28"
   }
 }
