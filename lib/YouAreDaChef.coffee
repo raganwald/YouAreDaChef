@@ -194,6 +194,6 @@ _.extend YouAreDaChef,
   inspect: (clazz) ->
     clazz.__YouAreDaChef
 
-_.defaults this, {YouAreDaChef}
-
+module.exports = YouAreDaChef
+_.defaults module.exports, {YouAreDaChef}
 this
