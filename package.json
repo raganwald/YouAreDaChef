@@ -10,16 +10,18 @@
   },
   "main": "lib/YouAreDaChef.js",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine-node --coffee --verbose spec"
+    "test": "jasmine-node --coffee --verbose spec",
+    "prepublish": "coffee -c lib/YouAreDaChef.coffee"
   },
   "engines": {
-    "node": ""
+    "node": "*"
   },
   "dependencies": {
-    "underscore": "~1.2"
+    "underscore": "~1.4.3"
   },
   "devDependencies": {
-    "UnderscoreMatchersForJasmine": "~0.0.1",
-    "jasmine-node": "~1.0.26"
+    "UnderscoreMatchersForJasmine": "~0.0.5",
+    "jasmine-node": "~1.0.28",
+    "coffee-script": "~1.4.0"
   }
 }
