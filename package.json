@@ -14,7 +14,7 @@
     "prepublish": "coffee -c lib/YouAreDaChef.coffee"
   },
   "engines": {
-    "node": ""
+    "node": "*"
   },
   "dependencies": {
     "underscore": "~1.4.3"
