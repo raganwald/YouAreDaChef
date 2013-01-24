@@ -1,0 +1,18 @@
+{
+  "name": "YouAreDaChef",
+  "repo": "raganwald/YouAreDaChef",
+  "description": "Coffeescript/Javascript method combinations",
+  "version": "1.1.5",
+  "keywords": [],
+  "dependencies": {
+    "component/underscore": "*"
+  },
+  "development": {
+		"component/emitter": "*"
+	},
+	"main": "lib/YouAreDaChef.js",
+  "scripts": [
+    "lib/YouAreDaChef.js"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <script src="../build/build.js"></script>
+    <script>
+			var YouAreDaChef = require('YouAreDaChef');
+
+			function User(name) {
+				this.name = name;
+			};
+
+			User.prototype.save = function() {
+				console.info('saving user %o', this);
+			};
+
+			User.prototype.validate = function() {
+				console.log('validating user %o', this);
+				return !!this.name;
+			};
+
+			YouAreDaChef(User)
+				.when('save', function() {
+					return this.validate();
+				})
+				.after('save', function() {
+					console.log('Saved ' + this.name);
+				});
+
+			var noName = new User();
+			noName.save(); // won't even call save() method
+
+			var bob = new User('bob');
+			bob.save();
+
+		</script>
+  </body>
+</html>
