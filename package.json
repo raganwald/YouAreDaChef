@@ -10,7 +10,8 @@
   },
   "main": "lib/YouAreDaChef.js",
   "scripts": {
-    "test": "jasmine-node --coffee --verbose spec"
+    "test": "jasmine-node --coffee --verbose spec",
+    "prepublish": "coffee -c lib/YouAreDaChef.coffee"
   },
   "engines": {
     "node": ""
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "UnderscoreMatchersForJasmine": "~0.0.5",
-    "jasmine-node": "~1.0.28"
+    "jasmine-node": "~1.0.28",
+    "coffee-script": "~1.4.0"
   }
 }
