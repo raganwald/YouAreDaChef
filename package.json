@@ -16,10 +16,10 @@
     "node": ""
   },
   "dependencies": {
-    "underscore": "~1.2"
+    "underscore": "~1.4.3"
   },
   "devDependencies": {
-    "UnderscoreMatchersForJasmine": "~0.0.1",
-    "jasmine-node": "~1.0.26"
+    "UnderscoreMatchersForJasmine": "0.0.5",
+    "jasmine-node": "~1.0.28"
   }
 }
