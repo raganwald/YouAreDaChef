@@ -10,7 +10,7 @@
   },
   "main": "lib/YouAreDaChef.js",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine-node --coffee --verbose spec"
+    "test": "jasmine-node --coffee --verbose spec"
   },
   "engines": {
     "node": ""
